@@ -23,25 +23,31 @@ def index():
 
 @app.route('/game')
 def game():
+    # Select 4 random categories each time the index page is loaded
+    selected_categories = random.sample(list(all_categories.keys()), 4)
+    # Store categories in session for game over display
+    session['game_categories'] = {
+        'yellow': selected_categories[0],
+        'green': selected_categories[1],
+        'blue': selected_categories[2],
+        'purple': selected_categories[3]
+    }
+    # Select words from these categories
+    words = []
+    for category in selected_categories:
+        words.extend(random.sample(all_categories[category], 4))
+    # Shuffle the words to mix the categories
+    random.shuffle(words)
 
-  # Select 4 random categories each time the index page is loaded
-  selected_categories = random.sample(list(all_categories.keys()), 4)
-  # Select words from these categories
-  words = []
-  for category in selected_categories:
-    words.extend(random.sample(all_categories[category], 4))
-  # Shuffle the words to mix the categories
-  random.shuffle(words)
+    # Initialize for a new game
+    session['used_colors'] = []
+    session['category_colors'] = {}
+    session.pop('mistakes', None)  # Properly reset the 'mistakes' counter
+    session['mistakes'] = 4
+    session['already_guessed'] = []  # Initialize the already_guessed list
+    session['grid'] = [words[i:i + 4] for i in range(0, 16, 4)]
+    return render_template('index.html', grid=session['grid'])
 
-  # Initialize for a new game
-  session['used_colors'] = []
-  session['category_colors'] = {}
-  session.pop('mistakes', None)  # Properly reset the 'mistakes' counter
-  session['mistakes'] = 4
-  session['already_guessed'] = []  # Initialize the already_guessed list
-  session['grid'] = [words[i:i + 4] for i in range(0, 16, 4)]
-  return render_template('index.html', grid=session['grid'])
-  
 @app.route('/submit_guess', methods=['POST'])
 def submit_guess():
   data = request.get_json()

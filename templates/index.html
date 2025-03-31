@@ -108,8 +108,14 @@
     <h3>Create groups of four!</h3>
   <h5>A Replication of <a href="https://www.nytimes.com/games/connections"> NYT Connections</a>, built on Replit</h5>
 </div>
-  <div id="game-over-container" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); color: white; text-align: center; padding-top: 20%;">
-    <h1 style="font-size: 5rem;">GAME OVER</h1>
+  <div id="game-over-container" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); color: white; text-align: center; padding-top: 10%;">
+    <h1 style="font-size: 4rem;">GAME OVER</h1>
+    <div id="correct-answers" style="margin-top: 20px; font-size: 1.2rem;">
+      <div class="yellow" style="margin: 10px; padding: 10px;">Yellow Category: {{ session.game_categories.yellow }}</div>
+      <div class="green" style="margin: 10px; padding: 10px;">Green Category: {{ session.game_categories.green }}</div>
+      <div class="blue" style="margin: 10px; padding: 10px;">Blue Category: {{ session.game_categories.blue }}</div>
+      <div class="purple" style="margin: 10px; padding: 10px;">Purple Category: {{ session.game_categories.purple }}</div>
+    </div>
   </div>
 
     <div class="grid">
