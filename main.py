@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_cors import CORS
 import random
 import os
+import time
 from categories import all_categories
 
 app = Flask(__name__)
