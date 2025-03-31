@@ -78,16 +78,17 @@ def submit_guess():
   else:
     # All words are in the same category, so handle the color assignment
     if first_word_category not in session['category_colors']:
-      available_colors = [
-          color for color in ['blue', 'green', 'yellow', 'purple']
-          if color not in session['used_colors']
-      ]
-      if not available_colors:
-        return jsonify({
-            'result': 'error',
-            'message': 'No more colors available'
-        })
-      color = random.choice(available_colors)
+      # Get difficulty level from categories
+      difficulty_colors = {
+          0: 'yellow',  # Easiest
+          1: 'green',   # Medium-Easy
+          2: 'blue',    # Difficult
+          3: 'purple'   # Most Difficult
+      }
+      # Get index of category to determine difficulty (0-3)
+      categories_list = list(all_categories.keys())
+      difficulty_level = categories_list.index(first_word_category)
+      color = difficulty_colors[difficulty_level]
       session['used_colors'].append(color)
       session['category_colors'][first_word_category] = color
   color = session['category_colors'][first_word_category]
