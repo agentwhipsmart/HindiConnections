@@ -9,8 +9,19 @@ app.secret_key = 'your_secret_key'  # Replace with a real secret key for product
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-  #if not is_logged_in():
-  #return redirect(url_for('login'))
+    if request.method == 'POST':
+        # Save user data in session
+        session['user_data'] = {
+            'name': request.form['name'],
+            'age': request.form['age'],
+            'profession': request.form['profession'],
+            'start_time': time.time()
+        }
+        return redirect(url_for('game'))
+    return render_template('register.html')
+
+@app.route('/game')
+def game():
 
   # Select 4 random categories each time the index page is loaded
   selected_categories = random.sample(list(all_categories.keys()), 4)
