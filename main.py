@@ -2,28 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_cors import CORS
 import random
 import os
-import time
-import csv
-from datetime import datetime
 from categories import all_categories
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Replace with a real secret key for production
 
-@app.route('/register', methods=['POST'])
-def register():
-    session['user_data'] = {
-        'name': request.form['name'],
-        'age': request.form['age'],
-        'profession': request.form['profession'],
-        'start_time': time.time()
-    }
-    return redirect(url_for('index'))
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if 'user_data' not in session:
-        return render_template('user_form.html')
   #if not is_logged_in():
   #return redirect(url_for('login'))
 
@@ -121,29 +106,6 @@ def submit_guess():
       'alreadyGuessed': False
   })
 
-@app.route('/complete_game', methods=['POST'])
-def complete_game():
-    if 'user_data' in session:
-        end_time = time.time()
-        duration = end_time - session['user_data']['start_time']
-        
-        # Save to CSV
-        data = [
-            session['user_data']['name'],
-            session['user_data']['age'],
-            session['user_data']['profession'],
-            f"{duration:.2f}"
-        ]
-        
-        with open('game_results.csv', 'a', newline='') as f:
-            writer = csv.writer(f)
-            if os.path.getsize('game_results.csv') == 0:
-                writer.writerow(['Name', 'Age', 'Profession', 'Time (seconds)'])
-            writer.writerow(data)
-            
-        session.pop('user_data', None)
-        return jsonify({'status': 'success'})
-    return jsonify({'status': 'error'})
 
 if __name__ == '__main__':
   app.run(debug=True, port=5001, host='0.0.0.0')
